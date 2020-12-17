@@ -1,0 +1,47 @@
+{
+  "name": "book_catalog",
+  "version": "1.0.0",
+  "description": "A catalog for reviewing, rating and finding books",
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FrazzIe/cswd_coursework.git"
+  },
+  "keywords": [
+    "catalog",
+    "book",
+    "review",
+    "rate",
+    "search",
+    "find",
+    "history"
+  ],
+  "author": "Fraser Watt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FrazzIe/cswd_coursework/issues"
+  },
+  "homepage": "https://github.com/FrazzIe/cswd_coursework#readme",
+  "dependencies": {
+    "@nuxtjs/auth": "^4.9.1",
+    "@nuxtjs/axios": "^5.12.3",
+    "argon2": "^0.27.0",
+    "core-js": "^3.8.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "nuxt": "^2.14.10",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.11.2"
+  }
+}
