@@ -1,12 +1,20 @@
 <template>
 	<v-row justify="center">
-		<v-col sm="7" md="6" lg="5" xl="5">
-			<v-card class="elevation-12">
+		<v-col sm="12" md="12" lg="6" xl="6">
+			<v-card class="elevation-12 book-view scroll-bar">
 				<book-cover :isbn="book.isbn" height="400px"></book-cover>
 				<v-divider></v-divider>
-				<v-card-title>{{ book.title }}</v-card-title>
+				<v-toolbar elevation="0">
+					<v-toolbar-title>{{ book.title }}</v-toolbar-title>
+					<v-spacer></v-spacer>
+					<v-btn text color="primary">
+						<v-icon left color="success">mdi-bookmark-plus</v-icon>
+						MARK AS READ						
+					</v-btn>
+				</v-toolbar>
+
 				<v-card-text>
-					<v-row justify="space-between">
+					<v-row justify="space-between" no-gutters>
 						<v-col sm="6">
 							<p class="text-subtitle-1 font-weight-black">
 								<span class="text-subtitle-2">Author(s)</span>
@@ -37,33 +45,50 @@
 				</v-card-text>
 			</v-card>
 		</v-col>
-		<v-col sm="7" md="6" lg="5" xl="5">
-			<v-card class="elevation-12">
-				<v-toolbar>
+		<v-col sm="12" md="12" lg="6" xl="6">
+			<v-card class="elevation-12 book-view scroll-bar">
+				<v-toolbar elevation="0">
 					<v-toolbar-title>Reviews</v-toolbar-title>
 					<v-spacer></v-spacer>
-					<v-rating background-color="grey lighten-1" color="warning" empty-icon="mdi-star-outline" full-icon="mdi-star" half-icon="mdi-star-half-full" half-increments length="5" readonly size="20" :value="book.rating"></v-rating>
+					<v-rating background-color="grey lighten-1" color="yellow accent-4" half-increments length="5" readonly size="20" :value="book.rating"></v-rating>
 				</v-toolbar>
 
 				<v-divider></v-divider>
 
-				<v-list two-line class="overflow-y-auto scroll-bar" max-height="418">
+				<v-list two-line class="overflow-y-auto scroll-bar book-review-list">
 					<template v-for="(item, index) in book.reviews">
 						<v-list-item :key="index">
 							<v-list-item-content>
-								<v-list-item-title>{{ item.username }} - <span class="text-caption">{{ capitalise(item.group) }}</span></v-list-item-title>
-								<span class="text--primary review">{{ item.review }}</span>
+								<v-row align="center" no-gutters>
+									<v-col>
+										<span class="text--primary font-weight-bold">{{ item.username }} </span>-
+										<span class="text-caption">{{ capitalise(item.group) }}</span>
+									</v-col>
+									<v-col>
+										<v-rating class="float-right" v-model="item.rating" background-color="grey lighten-1" color="yellow accent-4" dense half-increments readonly size="18"></v-rating>
+									</v-col>
+								</v-row>
+								
+
+								<span class="text--primary book-review text-justify">{{ item.review }}</span>
 								<v-list-item-subtitle>{{ formatDate(item.created_at) }}</v-list-item-subtitle>
 							</v-list-item-content>
 						</v-list-item>
 
 						<v-divider v-if="index < book.reviews.length - 1" :key="`divider-${index}`"></v-divider>
 					</template>
+					<template v-if="book.reviews.length == 0">
+						<v-card-text>
+							<p class="text-center text-caption">
+								No reviews to display!
+							</p>
+						</v-card-text>
+					</template>
 				</v-list>
 
 				<v-divider></v-divider>
 
-				<v-form ref="form" @submit.prevent="newComment">
+				<v-form ref="form" @submit.prevent="newReview">
 					<v-card-text>
 						<v-textarea label="Review" placeholder="Write a review..." counter v-model="input.review"
 							:rules="[
@@ -72,14 +97,17 @@
 								() => !!input.review && input.review.length <= 2000 || 'Review cannot contain more than 2000 characters',
 							]"
 						></v-textarea>
+						<span class="text-body-2">Rate</span>
+						<v-rating class="float-right" v-model="input.rating" background-color="grey lighten-1" color="yellow accent-4" dense half-increments size="20"></v-rating>
 					</v-card-text>
 
 					<v-divider></v-divider>
 
 					<v-card-actions>
-						<template>
-							<v-btn type="submit" text color="success">Review</v-btn>
-						</template>
+						<v-btn type="submit" text color="success" :disabled="book.read === 0">
+							<v-icon left v-if="book.read === 0">mdi-book-lock</v-icon>
+							Review (MUST READ)
+						</v-btn>
 					</v-card-actions>
 				</v-form>
 			</v-card>
@@ -105,8 +133,18 @@
 		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 		background-color: #555;
 	}
-	.review {
+	.book-review {
 		white-space: pre-wrap;
+	}
+	.book-view {
+		min-height: 850px;
+		max-height: 850px;
+		overflow-y: auto;
+	}
+	.book-review-list {
+		min-height: 495px;
+		max-height: 495px;
+		overflow-y: auto;
 	}
 </style>
 
@@ -121,9 +159,11 @@ export default {
 	data: () => ({
 		input: {
 			review: "",
-			rating: "",
+			rating: 2.5,
 		},
-		book: {},
+		book: {
+			reviews: [],
+		},
 	}),
 	computed: {
 		...mapGetters(["loggedInUser"]),
