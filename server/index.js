@@ -162,20 +162,27 @@ app.get("/search/:value", function(req, res) {
 });
 
 app.get("/books/:id", function(req, res) {
-	if (!req.params.id) //check if param exists
-		return res.status(500).json({ error: "Invalid book id" });
-	else if (isNaN(req.params.id)) //check if param is not a number
-		return res.status(500).json({ error: "Invalid book id" });
+	passport.authenticate("jwt", { session: false }, (err, user, info) => {
+		if (err) //if there is an error then
+			return res.status(500).json({ error: err.message });
 
-	mysql.query(mysql.queries.getBookByISBN, [req.params.id]).then((book) => {
-		if (typeof ticket[0] === "undefined")
-			res.status(404).json({ error: "This book no longer exists" });
-		else
-			res.status(200).json(book[0]);
-	}).catch((error) => {
-		console.log(error.message);
-		res.status(500).json({ error: error.message });
-	});
+		if (!req.params.id) //check if param exists
+			return res.status(500).json({ error: "Invalid book id" });
+		else if (isNaN(req.params.id)) //check if param is not a number
+			return res.status(500).json({ error: "Invalid book id" });
+
+		let userId = user ? user.id : 0;
+
+		mysql.query(mysql.queries.getBookByISBN, [userId, req.params.id]).then((book) => {
+			if (typeof book[0] === "undefined")
+				res.status(404).json({ error: "This book no longer exists" });
+			else
+				res.status(200).json(book[0]);
+		}).catch((error) => {
+			console.log(error.message);
+			res.status(500).json({ error: error.message });
+		});
+	})(req, res);
 });
 
 module.exports = {
