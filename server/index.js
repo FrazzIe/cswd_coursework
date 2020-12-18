@@ -260,6 +260,22 @@ app.post("/books/review/:id", function(req, res) {
 		});
 	})(req, res);
 });
+
+app.get("/books/history", function(req, res) {
+	passport.authenticate("jwt", { session: false }, (err, user, info) => {
+		if (err) //if there is an error then
+			return res.status(500).json({ error: err.message });
+
+		if (!user)
+			return res.status(403).json({ error: info.message });
+
+		mysql.query(mysql.queries.getBookHistory, [user.id]).then((history) => {
+			res.status(200).json(history);
+		}).catch((error) => {
+			res.status(500).json({ error: "Something went wrong" });
+		});		
+	})(req, res);
+});
 module.exports = {
 	path: "/api",
 	handler: app

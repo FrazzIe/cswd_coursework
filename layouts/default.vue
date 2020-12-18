@@ -39,12 +39,12 @@
 
 							<v-list nav dense>
 								<v-list-item-group>						
-									<v-list-item to="/" nuxt>
+									<v-list-item to="/books/history" nuxt>
 										<v-list-item-icon>
-											<v-icon>mdi-book-open-variant</v-icon>
+											<v-icon>mdi-history</v-icon>
 										</v-list-item-icon>
 										<v-list-item-content>
-											<v-list-item-title>PLACEHOLDER</v-list-item-title>
+											<v-list-item-title>BOOK HISTORY</v-list-item-title>
 										</v-list-item-content>
 									</v-list-item>
 								</v-list-item-group>
