@@ -73,16 +73,6 @@ export default {
 	computed: {
 		...mapGetters(["loggedInUser"]),
 	},
-	methods: {
-		formatDate(unix) {
-			return new Date(unix * 1000).toUTCString();
-		},
-		capitalise(str) {
-			if (typeof str !== "string")
-				return "";
-			return str.charAt(0).toUpperCase() + str.slice(1);
-		},
-	},
 	async asyncData({ error, $axios }) {
 		const books = await $axios.$get("/api/books/history").catch(err => {
 			if (err.response && err.response.data && err.response.data.error)
