@@ -9,7 +9,7 @@
 				</v-row>
 				<v-row justify="space-between">
 					<template v-for="(book, index) in item.data">
-						<v-col :key="index" sm="7" md="6" lg="3" xl="2">
+						<v-col :key="index" sm="6" md="3" lg="3" xl="3">
 							<v-card class="book-content" :to="`/books/${book.isbn}`" nuxt>
 								<book-cover :isbn="book.isbn" height="275px"></book-cover>
 								<v-divider></v-divider>
@@ -17,7 +17,7 @@
 								<v-card-subtitle>{{ book.authors }} &mdash; {{ book.year }}</v-card-subtitle>
 							</v-card>
 						</v-col>
-						<v-responsive :key="`width-${index}`" width="100%" v-if="index === 4">
+						<v-responsive :key="`width-${index}`" width="100%" v-if="index === 3">
 						</v-responsive>
 					</template>
 				</v-row>
