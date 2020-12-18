@@ -13,6 +13,8 @@ var queries = { //list of mysql queries
 	getBookReviewsById: "SELECT book_reviews.review, book_reviews.rating, users.username, groups.name AS 'group', UNIX_TIMESTAMP(book_reviews.created_at) AS 'created_at' FROM book_reviews JOIN users ON (book_reviews.creator_id = users.id) JOIN groups ON (users.group_id = groups.id) WHERE book_reviews.book_id = ?",
 	findBooks: "SELECT books.isbn, books.title, books.description, books.year, books.category, GROUP_CONCAT(book_authors.author SEPARATOR ', ') AS 'authors' FROM books JOIN book_authors ON (book_authors.book_id = books.id) WHERE books.isbn LIKE ? OR books.title LIKE ? OR books.category LIKE ? OR book_authors.author LIKE ? GROUP BY books.id",
 	createUser: "INSERT INTO users (`username`, `password`, `group_id`) VALUES (?, ?, 1)",
+	createReview: "INSERT INTO book_reviews (`book_id`, `creator_id`, `review`, `rating`) VALUES (?, ?, ?, ?)",
+	markBookRead: "INSERT INTO book_history (`book_id`, `user_id`) VALUES (?, ?)",
 }
 
 function execute(sql, params) { //asynchronous sql execute function
