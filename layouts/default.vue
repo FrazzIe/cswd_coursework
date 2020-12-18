@@ -57,7 +57,7 @@
 			</v-toolbar-items>
 		</v-app-bar>
 		<v-main>
-			<v-container fluid>
+			<v-container>
 				<nuxt />
 			</v-container>
 		</v-main>
