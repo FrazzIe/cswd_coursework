@@ -220,6 +220,45 @@ app.post("/books/read/:id", function(req, res) {
 		});
 	})(req, res);
 });
+
+app.post("/books/review/:id", function(req, res) {
+	passport.authenticate("jwt", { session: false }, (err, user, info) => {
+		if (err) //if there is an error then
+			return res.status(500).json({ error: err.message });
+
+		if (!user)
+			return res.status(403).json({ error: info.message });
+
+		if (!(req.body && req.body.data && req.body.data.review && req.body.data.rating && !isNaN(req.body.data.rating)))
+			return res.status(500).json({ error: "Invalid parameters" });
+
+		if (req.body.data.review.length < 20 || req.body.data.review.length > 2000)
+			return res.status(200).json({ error: "The review must be between 20 and 2000 characters long" });
+
+		if (req.body.data.rating < 1 && req.body.data.rating > 5)
+			return res.status(200).json({ error: "The rating must be between 1 and 5 stars" });
+
+		if (!req.params.id) //check if param exists
+			return res.status(404).json({ error: "Invalid book id" });
+		else if (isNaN(req.params.id)) //check if param is not a number
+			return res.status(404).json({ error: "Invalid book id" });
+
+		mysql.query(mysql.queries.getBookByISBN, [req.params.id]).then((book) => {
+			if (typeof book[0] === "undefined")
+				res.status(404).json({ error: "This book no longer exists" });
+			else if (book[0].read == 0)
+				res.status(200).json({ error: "You cannot review a book you haven't read" });
+			else
+				mysql.query(mysql.queries.createReview, [req.params.id, user.id, req.body.data.review, req.body.data.rating]).then((review) => {
+					res.status(200).json({ id: req.params.id });
+				}).catch((error) => {
+					res.status(500).json({ error: "Something went wrong" });
+				});
+		}).catch((error) => {
+			res.status(500).json({ error: "Something went wrong" });
+		});
+	})(req, res);
+});
 module.exports = {
 	path: "/api",
 	handler: app
