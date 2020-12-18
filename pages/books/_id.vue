@@ -52,7 +52,7 @@
 				<v-toolbar elevation="0">
 					<v-toolbar-title>Reviews (<span class="font-weight-bold">{{ book.reviews.length }}</span>)</v-toolbar-title>
 					<v-spacer></v-spacer>
-					<v-rating background-color="grey lighten-1" color="yellow accent-4" half-increments length="5" readonly size="20" :value="book.rating"></v-rating>
+					<v-rating background-color="grey lighten-1" color="yellow accent-4" length="5" readonly size="20" :value="book.rating"></v-rating>
 					<v-tooltip right>
 						<template v-slot:activator="{ on, attrs }">
 							<v-btn icon v-bind="attrs" v-on="on" @click="ratings.dialog = true">
@@ -75,7 +75,7 @@
 										<span class="text-caption">{{ capitalise(item.group) }}</span>
 									</v-col>
 									<v-col>
-										<v-rating class="float-right" v-model="item.rating" background-color="grey lighten-1" color="yellow accent-4" dense half-increments readonly size="18"></v-rating>
+										<v-rating class="float-right" v-model="item.rating" background-color="grey lighten-1" color="yellow accent-4" dense readonly size="18"></v-rating>
 									</v-col>
 								</v-row>
 								<span class="text--primary book-review text-justify">{{ item.review }}</span>
@@ -106,7 +106,7 @@
 							]"
 						></v-textarea>
 						<span class="text-body-2">Rate</span>
-						<v-rating class="float-right" v-model="input.rating" background-color="grey lighten-1" color="yellow accent-4" dense half-increments size="20"></v-rating>
+						<v-rating class="float-right" v-model="input.rating" background-color="grey lighten-1" color="yellow accent-4" dense size="20"></v-rating>
 					</v-card-text>
 
 					<v-divider></v-divider>
@@ -187,7 +187,7 @@ export default {
 	data: () => ({
 		input: {
 			review: "",
-			rating: 2.5,
+			rating: 3,
 		},
 		book: {
 			reviews: [],
