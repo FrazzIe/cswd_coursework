@@ -152,10 +152,14 @@
 
 <script>
 import { mapGetters } from "vuex";
+import snackBar from "@/components/snackBar";
+import loader from "@/components/loader";
 import bookCover from "@/components/bookCover";
 
 export default {
 	components: {
+		snackBar,
+		loader,
 		bookCover
 	},
 	data: () => ({
@@ -166,6 +170,14 @@ export default {
 		book: {
 			reviews: [],
 		},
+		snack: {
+			message: "",
+			color: "",
+		},
+		loader: {
+			message: "",
+			show: false,
+		}
 	}),
 	computed: {
 		...mapGetters(["isAuthenticated", "loggedInUser"]),
