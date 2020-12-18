@@ -283,6 +283,86 @@ app.get("/books/history", function(req, res) {
 		});		
 	})(req, res);
 });
+
+app.get("/books/interests", function(req, res) {
+	passport.authenticate("jwt", { session: false }, (err, user, info) => {
+		if (err) //if there is an error then
+			return res.status(500).json({ error: err.message });
+
+		if (!user)
+			return res.status(403).json({ error: info.message });
+
+		mysql.query(mysql.queries.getUserInterests, [user.id, user.id]).then((interests) => {
+			mysql.query(mysql.queries.getUnselectedInterests, [user.id, user.id]).then((availableInterests) => {
+				res.status(200).json({
+					available: availableInterests,
+					current: interests,
+				});
+			}).catch((error) => {
+				console.log(error);
+				res.status(500).json({ error: "Something went wrong" });
+			});	
+		}).catch((error) => {
+			res.status(500).json({ error: "Something went wrong" });
+		});		
+	})(req, res);
+});
+
+app.post("/books/interest/add", function(req, res) {
+	passport.authenticate("jwt", { session: false }, (err, user, info) => {
+		if (err) //if there is an error then
+			return res.status(500).json({ error: err.message });
+
+		if (!user)
+			return res.status(403).json({ error: info.message });
+
+		if (!(req.body && req.body.data && req.body.data.interest))
+			return res.status(500).json({ error: "Invalid parameters" });
+
+		mysql.query(mysql.queries.checkAvailableInterest, [user.id, user.id, req.body.data.interest]).then((interest) => {
+			if (typeof interest[0] === "undefined")
+				res.status(404).json({ error: "You already have this interest" });
+			else
+				mysql.query(mysql.queries.createInterest, [interest[0].id, user.id]).then((result) => {
+					res.status(200).json({ id: result.insertId });
+				}).catch((error) => {
+					res.status(500).json({ error: "Something went wrong" });
+				});
+		}).catch((error) => {
+			console.log(error);
+			res.status(500).json({ error: "Something went wrong" });
+		});
+	})(req, res);
+});
+
+app.post("/books/interest/remove", function(req, res) {
+	passport.authenticate("jwt", { session: false }, (err, user, info) => {
+		if (err) //if there is an error then
+			return res.status(500).json({ error: err.message });
+
+		if (!user)
+			return res.status(403).json({ error: info.message });
+
+		if (!(req.body && req.body.data && req.body.data.interest))
+			return res.status(500).json({ error: "Invalid parameters" });
+
+		mysql.query(mysql.queries.checkAvailableInterest, [user.id, user.id, req.body.data.interest]).then((interest) => {
+			if (typeof interest[0] === "undefined")
+				mysql.query(mysql.queries.removeInterest, [req.body.data.interest, user.id]).then((result) => {
+					res.status(200).json({});
+				}).catch((error) => {
+					res.status(500).json({ error: "Something went wrong" });
+					console.log(error);
+				});
+			else
+				res.status(404).json({ error: "You can't remove an interest you don't have" });
+		}).catch((error) => {
+			console.log(error);
+			res.status(500).json({ error: "Something went wrong" });
+		});
+	})(req, res);
+});
+
 module.exports = {
 	path: "/api",
 	handler: app
