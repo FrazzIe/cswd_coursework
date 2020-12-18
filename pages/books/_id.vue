@@ -219,6 +219,32 @@ export default {
 				});
 			}
 		},
+		markRead() {
+			this.loader.message = "Marking as read..";
+			this.loader.show = true;
+
+			this.$axios.$post(`/api/books/read/${this.$route.params.id}`, {}).then((resp) => {
+				this.loader.show = false;
+				if (resp) {
+					if (resp.error) {
+						this.snack.color = "error";
+						this.snack.message = resp.error;
+						console.log(resp.error);
+						return;
+					}
+
+					window.location.reload(true);
+				}
+			}).catch((error) => {
+				this.loader.show = false;
+				if (error.response && error.response.data && error.response.data.error) {
+					console.log(error.response.data.error);
+					this.snack.color = "error";
+					this.snack.message = error.response.data.error;
+				} else
+					console.log(error.message);
+			});
+		}
 	},
 	validate({ params }) {
 		return !isNaN(+params.id);
