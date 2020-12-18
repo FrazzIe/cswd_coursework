@@ -8,7 +8,7 @@
 					<v-toolbar-title>{{ book.title }}</v-toolbar-title>
 					<template v-if="book.read === 0">
 						<v-spacer></v-spacer>
-						<v-btn text color="primary">
+						<v-btn text color="primary" @click="markRead()">
 							<v-icon left color="success">mdi-bookmark-plus</v-icon>
 							MARK AS READ						
 						</v-btn>
@@ -108,7 +108,7 @@
 					<v-card-actions>
 						<v-btn v-if="isAuthenticated" type="submit" text color="success" :disabled="book.read === 0">
 							<v-icon left v-if="book.read === 0">mdi-book-lock</v-icon>
-							Review (MUST READ)
+							Review <span v-if="book.read === 0">(MUST READ)</span>
 						</v-btn>
 					</v-card-actions>
 				</v-form>
