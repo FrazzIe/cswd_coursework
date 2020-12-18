@@ -155,12 +155,11 @@ app.get("/search/:value", function(req, res) {
 	mysql.query(mysql.queries.findBooks, [req.params.value, req.params.value, req.params.value, req.params.value]).then((searchResults) => {
 		return res.status(200).json(searchResults);
 	}).catch((error) => {
-		console.log(error.message);
 		res.status(500).json({ error: error.message });
 	});
 });
 
-app.get("/books/:id", function(req, res) {
+app.get("/books/isbn/:id", function(req, res) {
 	passport.authenticate("jwt", { session: false }, (err, user, info) => {
 		if (err) //if there is an error then
 			return res.status(500).json({ error: err.message });
@@ -172,7 +171,7 @@ app.get("/books/:id", function(req, res) {
 
 		let userId = user ? user.id : 0;
 
-		mysql.query(mysql.queries.getBookByISBN, [userId, req.params.id]).then((book) => {
+		mysql.query(mysql.queries.getBookByISBN, [userId, userId, req.params.id]).then((book) => {
 			if (typeof book[0] === "undefined")
 				res.status(404).json({ error: "This book no longer exists" });
 			else
@@ -204,7 +203,7 @@ app.post("/books/read/:id", function(req, res) {
 		else if (isNaN(req.params.id)) //check if param is not a number
 			return res.status(404).json({ error: "Invalid book id" });
 
-		mysql.query(mysql.queries.getBookByISBN, [user.id, req.params.id]).then((book) => {
+		mysql.query(mysql.queries.getBookByISBN, [user.id, user.id, req.params.id]).then((book) => {
 			if (typeof book[0] === "undefined")
 				res.status(404).json({ error: "This book no longer exists" });
 			else if (book[0].read == 1)
@@ -243,11 +242,13 @@ app.post("/books/review/:id", function(req, res) {
 		else if (isNaN(req.params.id)) //check if param is not a number
 			return res.status(404).json({ error: "Invalid book id" });
 
-		mysql.query(mysql.queries.getBookByISBN, [user.id, req.params.id]).then((book) => {
+		mysql.query(mysql.queries.getBookByISBN, [user.id, user.id, req.params.id]).then((book) => {
 			if (typeof book[0] === "undefined")
 				res.status(404).json({ error: "This book no longer exists" });
 			else if (book[0].read == 0)
 				res.status(200).json({ error: "You cannot review a book you haven't read" });
+			else if (book[0].reviewed == 1)
+				res.status(200).json({ error: "You cannot review a book you have already reviewed" });
 			else
 				mysql.query(mysql.queries.createReview, [book[0].id, user.id, req.body.data.review, req.body.data.rating]).then((review) => {
 					res.status(200).json({ id: req.params.id });

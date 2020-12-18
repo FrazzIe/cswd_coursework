@@ -6,7 +6,7 @@
 				<v-divider></v-divider>
 				<v-toolbar elevation="0">
 					<v-toolbar-title>{{ book.title }}</v-toolbar-title>
-					<template v-if="book.read === 0">
+					<template v-if="!hasRead">
 						<v-spacer></v-spacer>
 						<v-btn text color="primary" @click="markRead()">
 							<v-icon left color="success">mdi-bookmark-plus</v-icon>
@@ -106,9 +106,9 @@
 					<v-divider></v-divider>
 
 					<v-card-actions>
-						<v-btn v-if="isAuthenticated" type="submit" text color="success" :disabled="book.read === 0">
-							<v-icon left v-if="book.read === 0">mdi-book-lock</v-icon>
-							Review <span v-if="book.read === 0">(MUST READ)</span>
+						<v-btn v-if="isAuthenticated" type="submit" text color="success" :disabled="!hasRead || !canReview">
+							<v-icon left v-if="!hasRead || !canReview">mdi-book-lock</v-icon>
+							Review <span v-if="!hasRead">(MUST READ)</span>
 						</v-btn>
 					</v-card-actions>
 				</v-form>
@@ -181,6 +181,12 @@ export default {
 	}),
 	computed: {
 		...mapGetters(["isAuthenticated", "loggedInUser"]),
+		canReview() {
+			return this.book.read === 1 && !this.book.reviewed === 0;
+		},
+		hasRead() {
+			return this.book.read === 1;
+		}
 	},
 	methods: {
 		formatDate(unix) {
@@ -250,7 +256,7 @@ export default {
 		return !isNaN(+params.id);
 	},
 	async asyncData({ params, error, $axios }) {
-		const book = await $axios.$get(`/api/books/${+params.id}`).catch(err => {
+		const book = await $axios.$get(`/api/books/isbn/${+params.id}`).catch(err => {
 			if (err.response && err.response.data && err.response.data.error)
 				error({ message: err.response.data.error, statusCode: err.response.status })
 		});
