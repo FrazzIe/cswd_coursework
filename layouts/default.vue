@@ -6,10 +6,18 @@
 			</nuxt-link>
 			<v-spacer></v-spacer>
 			<v-toolbar-items>
+				<v-btn elevation="0" to="/books/all" nuxt exact>
+					<v-icon left>mdi-book-open-variant</v-icon>
+					ALL BOOKS
+				</v-btn>
 				<template v-if="isAuthenticated">
-					<v-btn elevation="0" to="/" nuxt exact>
-						<v-icon left>mdi-book-open-variant</v-icon>
-						PLACEHOLDER
+					<v-btn elevation="0" to="/books/history" nuxt exact>
+						<v-icon left>mdi-history</v-icon>
+						MY HISTORY
+					</v-btn>
+					<v-btn elevation="0" to="/books/interests" nuxt exact>
+						<v-icon left>mdi-thumbs-up-down</v-icon>
+						MY INTERESTS
 					</v-btn>
 					<v-menu v-model="accountMenu" :close-on-content-click="false" :nudge-width="200" offset-y bottom rounded="0">
 						<template v-slot:activator="{ on, attrs }">
@@ -33,21 +41,6 @@
 										</v-btn>
 									</v-list-item-action>
 								</v-list-item>
-							</v-list>
-
-							<v-divider></v-divider>
-
-							<v-list nav dense>
-								<v-list-item-group>						
-									<v-list-item to="/books/history" nuxt>
-										<v-list-item-icon>
-											<v-icon>mdi-history</v-icon>
-										</v-list-item-icon>
-										<v-list-item-content>
-											<v-list-item-title>BOOK HISTORY</v-list-item-title>
-										</v-list-item-content>
-									</v-list-item>
-								</v-list-item-group>
 							</v-list>
 						</v-card>
 					</v-menu>
