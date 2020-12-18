@@ -10,11 +10,11 @@
 				<v-row justify="space-between">
 					<template v-for="(book, index) in item.data">
 						<v-col :key="index" sm="7" md="6" lg="3" xl="2">
-							<v-card class="book-content">								
+							<v-card class="book-content" :to="`/books/${book.isbn}`" nuxt>
 								<book-cover :isbn="book.isbn" height="275px"></book-cover>
 								<v-divider></v-divider>
-								<v-card-title class="text-body-2 text-justify">{{ book.title }}</v-card-title>
-								<v-card-subtitle>s &mdash; {{ book.year }}</v-card-subtitle>
+								<v-card-title class="text-body-2">{{ book.title }}</v-card-title>
+								<v-card-subtitle>{{ book.authors }} &mdash; {{ book.year }}</v-card-subtitle>
 							</v-card>
 						</v-col>
 						<v-responsive :key="`width-${index}`" width="100%" v-if="index === 4">
