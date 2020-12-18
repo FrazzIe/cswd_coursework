@@ -191,6 +191,35 @@ app.get("/books/:id", function(req, res) {
 	})(req, res);
 });
 
+app.post("/books/read/:id", function(req, res) {
+	passport.authenticate("jwt", { session: false }, (err, user, info) => {
+		if (err) //if there is an error then
+			return res.status(500).json({ error: err.message });
+
+		if (!user)
+			return res.status(403).json({ error: info.message });
+		
+		if (!req.params.id) //check if param exists
+			return res.status(404).json({ error: "Invalid book id" });
+		else if (isNaN(req.params.id)) //check if param is not a number
+			return res.status(404).json({ error: "Invalid book id" });
+
+		mysql.query(mysql.queries.getBookByISBN, [req.params.id]).then((book) => {
+			if (typeof book[0] === "undefined")
+				res.status(404).json({ error: "This book no longer exists" });
+			else if (book[0].read == 1)
+				res.status(200).json({ error: "You already marked this book as read" });
+			else
+				mysql.query(mysql.queries.markBookRead, [req.params.id, user.id]).then((result) => {
+					res.status(200).json({ id: req.params.id });
+				}).catch((error) => {
+					res.status(500).json({ error: "Something went wrong" });
+				});
+		}).catch((error) => {
+			res.status(500).json({ error: "Something went wrong" });
+		});
+	})(req, res);
+});
 module.exports = {
 	path: "/api",
 	handler: app
