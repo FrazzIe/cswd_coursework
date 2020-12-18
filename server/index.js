@@ -146,6 +146,22 @@ app.get("/books", function(req, res) {
 	})(req, res);
 });
 
+app.get("/search/:value", function(req, res) {
+	if (!req.params.value) //check if param exists
+		return res.status(500).json({ error: "Invalid search value" });
+	if (req.params.value.length < 4)
+		return res.status(200).json({ error: "Search value must be at least 4 characters" });
+
+	req.params.value = `%${req.params.value}%`;
+
+	mysql.query(mysql.queries.findBooks, [req.params.value, req.params.value, req.params.value, req.params.value]).then((searchResults) => {
+		return res.status(200).json(searchResults);
+	}).catch((error) => {
+		console.log(error.message);
+		res.status(500).json({ error: error.message });
+	});
+});
+
 module.exports = {
 	path: "/api",
 	handler: app
