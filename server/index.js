@@ -65,7 +65,7 @@ app.post("/auth/register", function(req, res) {
 
 	if (!(req.body.data.username && req.body.data.password))
 		return res.status(500).json({ error: "You must include a username and a password" });
-	
+
 	if (req.body.data.username.length > 30)
 		return res.status(200).json({ error: "Username must be less than 30 characters" });
 
@@ -176,7 +176,14 @@ app.get("/books/:id", function(req, res) {
 			if (typeof book[0] === "undefined")
 				res.status(404).json({ error: "This book no longer exists" });
 			else
-				res.status(200).json(book[0]);
+				mysql.query(mysql.queries.getBookReviewsById, [book[0].id]).then((reviews) => {
+					console.log(reviews);
+					book[0].reviews = reviews;
+					res.status(200).json(book[0]);
+				}).catch((error) => {
+					console.log(error.message);
+					res.status(500).json({ error: error.message });
+				});
 		}).catch((error) => {
 			console.log(error.message);
 			res.status(500).json({ error: error.message });
