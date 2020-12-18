@@ -2,11 +2,12 @@
 	<v-app>
 		<v-app-bar fixed app>
 			<nuxt-link to="/" class="pointer" tag="v-toolbar-title">
-				Book Catalog
+				<v-icon left>mdi-home</v-icon>
+				Techreads
 			</nuxt-link>
 			<v-spacer></v-spacer>
 			<v-toolbar-items>
-				<v-btn elevation="0" to="/books/all" nuxt exact>
+				<v-btn elevation="0" to="/books" nuxt exact>
 					<v-icon left>mdi-book-open-variant</v-icon>
 					ALL BOOKS
 				</v-btn>
