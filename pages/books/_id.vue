@@ -50,9 +50,17 @@
 		<v-col sm="12" md="12" lg="6" xl="6">
 			<v-card class="elevation-12 book-view scroll-bar">
 				<v-toolbar elevation="0">
-					<v-toolbar-title>Reviews</v-toolbar-title>
+					<v-toolbar-title>Reviews (<span class="font-weight-bold">{{ book.reviews.length }}</span>)</v-toolbar-title>
 					<v-spacer></v-spacer>
 					<v-rating background-color="grey lighten-1" color="yellow accent-4" half-increments length="5" readonly size="20" :value="book.rating"></v-rating>
+					<v-tooltip right>
+						<template v-slot:activator="{ on, attrs }">
+							<v-btn icon v-bind="attrs" v-on="on" @click="ratings.dialog = true">
+								<v-icon color="info">mdi-finance</v-icon>
+							</v-btn>
+						</template>
+						<span>Ratings distribution</span>
+					</v-tooltip>
 				</v-toolbar>
 
 				<v-divider></v-divider>
@@ -113,6 +121,22 @@
 					</v-card-actions>
 				</v-form>
 			</v-card>
+			<v-dialog v-model="ratings.dialog" width="500">
+				<v-card class="mx-auto text-center" max-width="600">				
+					<v-sheet color="rgba(0, 0, 0, .12)">
+						<v-sparkline class="pt-3" :value="bookRatings" height="100" padding="24" label-size="8" type="bar" auto-line-width stroke-linecap="square">
+							<template v-slot:label="item">
+								{{ item.index + 1 }} stars ({{ item.value }})
+							</template>
+						</v-sparkline>
+					</v-sheet>
+					<v-card-text>
+						<div class="display-1 font-weight-thin pt-3">
+							Ratings Distribution
+						</div>
+					</v-card-text>
+				</v-card>
+			</v-dialog>
 		</v-col>
 	</v-row>
 </template>
@@ -169,6 +193,10 @@ export default {
 		},
 		book: {
 			reviews: [],
+			ratings: [],
+		},
+		ratings: {
+			dialog: false,
 		},
 		snack: {
 			message: "",
@@ -186,6 +214,14 @@ export default {
 		},
 		hasRead() {
 			return this.book.read === 1;
+		},
+		bookRatings() {
+			let ratings = [0, 0, 0, 0, 0];
+
+			for (var i = 0; i < this.book.ratings.length; i++)
+				ratings[this.book.ratings[i].rating - 1] = this.book.ratings[i].count;
+			
+			return ratings;
 		}
 	},
 	methods: {

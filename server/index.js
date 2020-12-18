@@ -176,9 +176,16 @@ app.get("/books/isbn/:id", function(req, res) {
 				res.status(404).json({ error: "This book no longer exists" });
 			else
 				mysql.query(mysql.queries.getBookReviewsById, [book[0].id]).then((reviews) => {
-					console.log(reviews);
 					book[0].reviews = reviews;
-					res.status(200).json(book[0]);
+					
+					mysql.query(mysql.queries.getBookRatingDistribution, [book[0].id]).then((ratings) => {
+						book[0].ratings = ratings;
+						console.log(book[0]);
+						res.status(200).json(book[0]);
+					}).catch((error) => {
+						console.log(error.message);
+						res.status(500).json({ error: error.message });
+					});
 				}).catch((error) => {
 					console.log(error.message);
 					res.status(500).json({ error: error.message });
