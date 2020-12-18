@@ -67,6 +67,8 @@ export default {
 	components: {
 		bookCover
 	},
+	middleware: "auth",
+	auth: true,
 	data: () => ({
 
 	}),

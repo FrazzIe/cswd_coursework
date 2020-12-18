@@ -63,6 +63,8 @@ export default {
 		snackBar,
 		loader
 	},
+	middleware: "auth",
+	auth: true,
 	data: () => ({
 		input: {
 			interest: null,

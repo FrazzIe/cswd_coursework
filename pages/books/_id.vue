@@ -184,6 +184,8 @@ export default {
 		loader,
 		bookCover
 	},
+	middleware: "auth",
+	auth: false,
 	data: () => ({
 		input: {
 			review: "",

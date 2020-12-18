@@ -116,6 +116,7 @@ export default {
 		bookCover
 	},
 	middleware: "auth",
+	auth: false,
 	data: () => ({
 		search: {
 			loading: false,

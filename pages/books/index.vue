@@ -41,7 +41,7 @@ export default {
 		bookCover
 	},
 	middleware: "auth",
-	auth: "guest",
+	auth: false,
 	data: () => ({
 		books: [],
 	}),
