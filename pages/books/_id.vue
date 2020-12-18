@@ -78,8 +78,6 @@
 										<v-rating class="float-right" v-model="item.rating" background-color="grey lighten-1" color="yellow accent-4" dense half-increments readonly size="18"></v-rating>
 									</v-col>
 								</v-row>
-								
-
 								<span class="text--primary book-review text-justify">{{ item.review }}</span>
 								<v-list-item-subtitle>{{ formatDate(item.created_at) }}</v-list-item-subtitle>
 							</v-list-item-content>
