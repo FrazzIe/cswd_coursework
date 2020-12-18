@@ -47,6 +47,10 @@
 					</v-menu>
 				</template>
 				<template v-else>
+					<v-btn elevation="0" to="/login" nuxt exact>
+						<v-icon left>mdi-login</v-icon>
+						LOGIN
+					</v-btn>
 				</template>
 			</v-toolbar-items>
 		</v-app-bar>

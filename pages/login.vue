@@ -3,7 +3,10 @@
 		<v-col sm="7" md="5" lg="4" xl="3">
 				<v-card class="elevation-12" tile>
 					<v-toolbar class="transparent" flat dense>
-						<v-toolbar-title>Techreads</v-toolbar-title>
+						<nuxt-link to="/" class="pointer" tag="v-toolbar-title">
+							<v-icon left>mdi-home</v-icon>
+							Techreads
+						</nuxt-link>
 					</v-toolbar>
 
 					<v-divider></v-divider>
