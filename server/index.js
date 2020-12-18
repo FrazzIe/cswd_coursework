@@ -204,13 +204,13 @@ app.post("/books/read/:id", function(req, res) {
 		else if (isNaN(req.params.id)) //check if param is not a number
 			return res.status(404).json({ error: "Invalid book id" });
 
-		mysql.query(mysql.queries.getBookByISBN, [req.params.id]).then((book) => {
+		mysql.query(mysql.queries.getBookByISBN, [user.id, req.params.id]).then((book) => {
 			if (typeof book[0] === "undefined")
 				res.status(404).json({ error: "This book no longer exists" });
 			else if (book[0].read == 1)
 				res.status(200).json({ error: "You already marked this book as read" });
 			else
-				mysql.query(mysql.queries.markBookRead, [req.params.id, user.id]).then((result) => {
+				mysql.query(mysql.queries.markBookRead, [book[0].id, user.id]).then((result) => {
 					res.status(200).json({ id: req.params.id });
 				}).catch((error) => {
 					res.status(500).json({ error: "Something went wrong" });
@@ -243,13 +243,13 @@ app.post("/books/review/:id", function(req, res) {
 		else if (isNaN(req.params.id)) //check if param is not a number
 			return res.status(404).json({ error: "Invalid book id" });
 
-		mysql.query(mysql.queries.getBookByISBN, [req.params.id]).then((book) => {
+		mysql.query(mysql.queries.getBookByISBN, [user.id, req.params.id]).then((book) => {
 			if (typeof book[0] === "undefined")
 				res.status(404).json({ error: "This book no longer exists" });
 			else if (book[0].read == 0)
 				res.status(200).json({ error: "You cannot review a book you haven't read" });
 			else
-				mysql.query(mysql.queries.createReview, [req.params.id, user.id, req.body.data.review, req.body.data.rating]).then((review) => {
+				mysql.query(mysql.queries.createReview, [book[0].id, user.id, req.body.data.review, req.body.data.rating]).then((review) => {
 					res.status(200).json({ id: req.params.id });
 				}).catch((error) => {
 					res.status(500).json({ error: "Something went wrong" });
