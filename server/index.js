@@ -149,7 +149,6 @@ app.get("/books", function(req, res) {
 app.get("/search/:value", function(req, res) {
 	if (!req.params.value) //check if param exists
 		return res.status(500).json({ error: "Invalid search value" });
-	if (req.params.value.length < 4)
 
 	req.params.value = `%${req.params.value}%`;
 
