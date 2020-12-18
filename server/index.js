@@ -146,6 +146,20 @@ app.get("/books", function(req, res) {
 	})(req, res);
 });
 
+app.get("/books/all", function(req, res) {
+	passport.authenticate("jwt", { session: false }, (err, user, info) => {
+		if (err) //if there is an error then
+			return res.status(500).json({ error: err.message });
+
+		mysql.query(mysql.queries.getBooks, []).then((books) => {
+			return res.status(200).json(books);
+		}).catch((error) => {
+			console.log(error.message);
+			res.status(500).json({ error: error.message });
+		});
+	})(req, res);
+});
+
 app.get("/search/:value", function(req, res) {
 	if (!req.params.value) //check if param exists
 		return res.status(500).json({ error: "Invalid search value" });
