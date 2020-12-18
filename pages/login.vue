@@ -3,7 +3,7 @@
 		<v-col sm="7" md="5" lg="4" xl="3">
 				<v-card class="elevation-12" tile>
 					<v-toolbar class="transparent" flat dense>
-						<v-toolbar-title>Book Catalog</v-toolbar-title>
+						<v-toolbar-title>Techreads</v-toolbar-title>
 					</v-toolbar>
 
 					<v-divider></v-divider>
@@ -15,7 +15,7 @@
 									() => !!input.username && input.username.length <= 30 || 'Username must be less than 30 characters',
 									usernameCheck,
 								]" counter="30"></v-text-field>
-							<v-text-field prepend-icon="mdi-lock" label="Password" v-model="input.password"
+							<v-text-field type="password" prepend-icon="mdi-lock" label="Password" v-model="input.password"
 								:rules="[
 									() => !!input.password || 'A password is required',
 									() => !!input.password && input.password.length >= 8 || 'Password must be at least 8 characters long',
