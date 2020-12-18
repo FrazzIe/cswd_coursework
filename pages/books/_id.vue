@@ -6,11 +6,13 @@
 				<v-divider></v-divider>
 				<v-toolbar elevation="0">
 					<v-toolbar-title>{{ book.title }}</v-toolbar-title>
-					<v-spacer></v-spacer>
-					<v-btn text color="primary">
-						<v-icon left color="success">mdi-bookmark-plus</v-icon>
-						MARK AS READ						
-					</v-btn>
+					<template v-if="book.read === 0">
+						<v-spacer></v-spacer>
+						<v-btn text color="primary">
+							<v-icon left color="success">mdi-bookmark-plus</v-icon>
+							MARK AS READ						
+						</v-btn>
+					</template>
 				</v-toolbar>
 
 				<v-card-text>
@@ -104,7 +106,7 @@
 					<v-divider></v-divider>
 
 					<v-card-actions>
-						<v-btn type="submit" text color="success" :disabled="book.read === 0">
+						<v-btn v-if="isAuthenticated" type="submit" text color="success" :disabled="book.read === 0">
 							<v-icon left v-if="book.read === 0">mdi-book-lock</v-icon>
 							Review (MUST READ)
 						</v-btn>
@@ -166,7 +168,7 @@ export default {
 		},
 	}),
 	computed: {
-		...mapGetters(["loggedInUser"]),
+		...mapGetters(["isAuthenticated", "loggedInUser"]),
 	},
 	methods: {
 		formatDate(unix) {
