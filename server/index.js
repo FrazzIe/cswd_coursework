@@ -104,6 +104,48 @@ app.post("/auth/logout", function(req, res) {
 	res.status(200).json({});
 });
 
+app.get("/books", function(req, res) {
+	passport.authenticate("jwt", { session: false }, (err, user, info) => {
+		if (err) //if there is an error then
+			return res.status(500).json({ error: err.message });
+
+		mysql.query(mysql.queries.getRecentBooks, []).then((recentBooks) => {
+			mysql.query(mysql.queries.getHighestRatedBooks, []).then((ratedBooks) => {
+				mysql.query(mysql.queries.getRandomBooks, []).then((randomBooks) => {
+					if (!user)
+						return res.status(200).json([
+							{ title: "Recommended", data: [] },
+							{ title: "Recently Added", data: recentBooks },
+							{ title: "Highest Rated", data: ratedBooks },
+							{ title: "Random", data: randomBooks },
+						]);
+					else
+						mysql.query(mysql.queries.getRecommendedBooks, [user.id, user.id, user.id]).then((recommendedBooks) => {
+							return res.status(200).json([
+								{ title: "Recommended", data: recommendedBooks },
+								{ title: "Recently Added", data: recentBooks },
+								{ title: "Highest Rated", data: ratedBooks },
+								{ title: "Random", data: randomBooks },
+							]);
+						}).catch((error) => {
+							console.log(error.message);
+							res.status(500).json({ error: error.message });
+						});
+				}).catch((error) => {
+					console.log(error.message);
+					res.status(500).json({ error: error.message });
+				});
+			}).catch((error) => {
+				console.log(error.message);
+				res.status(500).json({ error: error.message });
+			});
+		}).catch((error) => {
+			console.log(error.message);
+			res.status(500).json({ error: error.message });
+		});
+	})(req, res);
+});
+
 module.exports = {
 	path: "/api",
 	handler: app
