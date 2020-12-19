@@ -7,6 +7,14 @@ A catalog for reviewing, rating and finding books built with [Nuxt.js](https://n
 * Password hashing (argon2)
 * Login/Registration
 * Single Page Application
+* View, Review & Rate Books
+* View distribution of book ratings
+* View book reviews
+* Search for books
+* Create and Remove book interests
+* View your book history
+* Mark books as read
+* View recommended, recently added and random books
 
 ## Requirements
 
