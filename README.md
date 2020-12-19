@@ -52,3 +52,19 @@ JWT_SECRET=secret
 $ yarn build
 $ yarn start
 ```
+
+### Included accounts for demonstration purposes (remove from database if used for non-demo purposes)
+
+| Username            | Password            | Group     |
+|---------------------|---------------------|-----------|
+| admin               | Admin123@           | admin     |
+| user1               | User123@            | user      |
+| user2               | User123@            | user      |
+| user3               | User123@            | user      |
+| user4               | User123@            | user      |
+| user5               | User123@            | user      |
+| user6               | User123@            | user      |
+| user7               | User123@            | user      |
+| user8               | User123@            | user      |
+| user9               | User123@            | user      |
+| user10              | User123@            | user      |

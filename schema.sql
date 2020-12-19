@@ -4,7 +4,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-CREATE DATABASE IF NOT EXISTS `book_catalog` /*!40100 DEFAULT CHARACTER SET latin1 */;
+CREATE DATABASE IF NOT EXISTS `book_catalog` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
 USE `book_catalog`;
 
 CREATE TABLE IF NOT EXISTS `books` (
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `books` (
   `creator_id` bigint(20) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `title` varchar(150) NOT NULL,
-  `description` text NOT NULL,
+  `description` mediumtext NOT NULL,
   `publisher` varchar(150) NOT NULL DEFAULT '',
   `year` year(4) NOT NULL,
   `category` varchar(100) NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `books` (
   UNIQUE KEY `isbn` (`isbn`),
   KEY `users_books_fk` (`creator_id`),
   CONSTRAINT `users_books_fk` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COMMENT='Contains book data';
 
 /*!40000 ALTER TABLE `books` DISABLE KEYS */;
 INSERT INTO `books` (`id`, `isbn`, `creator_id`, `created_at`, `title`, `description`, `publisher`, `year`, `category`) VALUES
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `book_authors` (
   PRIMARY KEY (`id`),
   KEY `books_authors_fk` (`book_id`),
   CONSTRAINT `books_authors_fk` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1 COMMENT='Contains book authors';
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COMMENT='Contains book authors';
 
 /*!40000 ALTER TABLE `book_authors` DISABLE KEYS */;
 INSERT INTO `book_authors` (`id`, `book_id`, `author`) VALUES
@@ -93,12 +93,48 @@ CREATE TABLE IF NOT EXISTS `book_history` (
   KEY `users_history_fk` (`user_id`),
   CONSTRAINT `books_history_fk` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`),
   CONSTRAINT `users_history_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COMMENT='Contains books read by users';
 
 /*!40000 ALTER TABLE `book_history` DISABLE KEYS */;
+INSERT INTO `book_history` (`id`, `book_id`, `user_id`, `created_at`) VALUES
+	(1, 1, 2, '2020-12-19 00:50:02'),
+	(2, 1, 3, '2020-12-19 00:50:02'),
+	(3, 1, 4, '2020-12-19 00:50:02'),
+	(4, 1, 5, '2020-12-19 00:50:02'),
+	(5, 1, 6, '2020-12-19 00:50:02'),
+	(6, 2, 8, '2020-12-19 00:50:02'),
+	(7, 3, 8, '2020-12-19 00:50:02'),
+	(8, 3, 5, '2020-12-19 00:50:02'),
+	(9, 3, 3, '2020-12-19 00:50:02'),
+	(10, 4, 11, '2020-12-19 00:50:02'),
+	(11, 6, 2, '2020-12-19 00:50:02'),
+	(12, 6, 11, '2020-12-19 00:50:02'),
+	(13, 7, 10, '2020-12-19 00:50:02'),
+	(14, 7, 9, '2020-12-19 00:50:02'),
+	(15, 8, 4, '2020-12-19 00:50:02'),
+	(16, 8, 2, '2020-12-19 00:50:02'),
+	(17, 8, 11, '2020-12-19 00:50:02'),
+	(18, 9, 10, '2020-12-19 00:50:02'),
+	(19, 10, 3, '2020-12-19 00:50:02'),
+	(20, 10, 2, '2020-12-19 00:50:02'),
+	(21, 11, 4, '2020-12-19 00:50:02'),
+	(22, 11, 2, '2020-12-19 00:50:02'),
+	(23, 11, 1, '2020-12-19 00:50:02'),
+	(24, 12, 5, '2020-12-19 00:50:02'),
+	(25, 12, 2, '2020-12-19 00:50:02'),
+	(26, 12, 1, '2020-12-19 00:50:02'),
+	(27, 13, 7, '2020-12-19 00:50:02'),
+	(28, 14, 6, '2020-12-19 00:50:02'),
+	(29, 14, 3, '2020-12-19 00:50:02'),
+	(30, 15, 9, '2020-12-19 00:50:02'),
+	(31, 15, 10, '2020-12-19 00:50:02'),
+	(32, 15, 4, '2020-12-19 00:50:02'),
+	(33, 15, 6, '2020-12-19 00:50:02'),
+	(34, 16, 7, '2020-12-19 00:50:02'),
+	(35, 16, 2, '2020-12-19 00:50:02'),
+	(36, 17, 1, '2020-12-19 00:50:02');
 /*!40000 ALTER TABLE `book_history` ENABLE KEYS */;
 
--- Dumping structure for table book_catalog.book_interests
 CREATE TABLE IF NOT EXISTS `book_interests` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `book_id` bigint(20) NOT NULL,
@@ -108,9 +144,11 @@ CREATE TABLE IF NOT EXISTS `book_interests` (
   KEY `users_interests_fk` (`user_id`),
   CONSTRAINT `books_interests_fk` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`),
   CONSTRAINT `users_interests_fk` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='Contains user book interests';
 
 /*!40000 ALTER TABLE `book_interests` DISABLE KEYS */;
+INSERT INTO `book_interests` (`id`, `book_id`, `user_id`) VALUES
+	(1, 16, 11);
 /*!40000 ALTER TABLE `book_interests` ENABLE KEYS */;
 
 CREATE TABLE IF NOT EXISTS `book_reviews` (
@@ -118,16 +156,53 @@ CREATE TABLE IF NOT EXISTS `book_reviews` (
   `book_id` bigint(20) NOT NULL,
   `creator_id` bigint(20) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `review` text NOT NULL,
+  `review` mediumtext NOT NULL,
   `rating` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `books_reviews_fk` (`book_id`),
   KEY `users_reviews_fk` (`creator_id`),
   CONSTRAINT `books_reviews_fk` FOREIGN KEY (`book_id`) REFERENCES `books` (`id`),
   CONSTRAINT `users_reviews_fk` FOREIGN KEY (`creator_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb4 COMMENT='Contains book reviews';
 
 /*!40000 ALTER TABLE `book_reviews` DISABLE KEYS */;
+INSERT INTO `book_reviews` (`id`, `book_id`, `creator_id`, `created_at`, `review`, `rating`) VALUES
+	(1, 1, 2, '2020-12-19 00:17:06', 'Great book, very comprehensive', 5),
+	(2, 1, 3, '2020-12-19 00:17:06', 'Tells you everything you need to know about JavaScript', 4),
+	(3, 1, 4, '2020-12-19 00:17:06', 'I didn\'t understand a word of this, I couldn\'t install Java', 1),
+	(4, 1, 5, '2020-12-19 00:17:06', 'Informative, but there are better free resources available at www.freecodecamp.org! Join today!', 3),
+	(5, 1, 6, '2020-12-19 00:17:06', 'meh, I prefer HTML better, the superior coding language', 2),
+	(6, 2, 8, '2020-12-19 00:17:06', 'Very useful and up to date', 5),
+	(7, 3, 8, '2020-12-19 00:17:06', 'I read this cover to cover, it was amazing', 4),
+	(8, 3, 5, '2020-12-19 00:17:06', 'Really good book for modern React developers', 3),
+	(9, 3, 3, '2020-12-19 00:17:06', 'Upea kirja, erittäin kattava', 1),
+	(10, 4, 11, '2020-12-19 00:17:06', 'Diz tudo o que você precisa saber sobre Angular', 5),
+	(11, 6, 2, '2020-12-19 00:17:06', 'This book is the best thing ever in the entire world', 5),
+	(12, 6, 11, '2020-12-19 00:17:06', 'Ag innse dhut a h-uile dad a dh ’fheumas tu a bhith agad mu JavaScript', 3),
+	(13, 7, 10, '2020-12-19 00:17:06', 'This is good but getting a bit out of date', 3),
+	(14, 7, 9, '2020-12-19 00:17:06', 'Braw!', 1),
+	(15, 8, 4, '2020-12-19 00:17:06', 'Quite old now but still a really useful guide to an important technology', 4),
+	(16, 8, 2, '2020-12-19 00:17:06', 'Makes a complex technology clear and understandable', 5),
+	(17, 8, 11, '2020-12-19 00:17:06', 'Fac universa artes patet quod facile intellegi.', 5),
+	(18, 9, 10, '2020-12-19 00:17:06', 'Quite good', 3),
+	(19, 10, 3, '2020-12-19 00:17:06', 'Very up to date and covers a lot of ground', 4),
+	(20, 10, 2, '2020-12-19 00:17:06', 'Comprehensive, but could be more clearly written', 3),
+	(21, 11, 4, '2020-12-19 00:17:06', 'Really interesting and well written', 4),
+	(22, 11, 2, '2020-12-19 00:17:06', 'I didn\'t get the point of this at all, I prefer to use Redux', 2),
+	(23, 11, 1, '2020-12-19 00:17:06', 'Worth reading', 3),
+	(24, 12, 5, '2020-12-19 00:17:06', 'Comprehensive, a really good guide to modern JavaScript', 5),
+	(25, 12, 2, '2020-12-19 00:17:06', 'I didn\'t get the point of this at all, I prefer to use Redux', 2),
+	(26, 12, 1, '2020-12-19 00:17:06', 'Worth reading', 3),
+	(27, 13, 7, '2020-12-19 00:17:06', 'GraphQL is a really interesting technology for APIs and this book explains it very well', 5),
+	(28, 14, 6, '2020-12-19 00:17:06', 'This is probably the worst £20 I\'ve spent since, well . . . maybe ever. The book doesn\'t give any background on actually learning core concepts of any of the development stack. There\'s no explanation given of classes/methods commonly used in React. It gives no background on what any of the NodeJS server components are doing, what\'s actually happening under the hood with Webpack, etc.', 1),
+	(29, 14, 3, '2020-12-19 00:17:06', 'This is a great book! ', 4),
+	(30, 15, 9, '2020-12-19 00:17:06', 'ਹੁਸ਼ਿਆਰ', 3),
+	(31, 15, 10, '2020-12-19 00:17:06', 'Блестящий', 4),
+	(32, 15, 4, '2020-12-19 00:17:06', 'شاندار', 5),
+	(33, 15, 6, '2020-12-19 00:17:06', '훌륭한', 5),
+	(34, 16, 7, '2020-12-19 00:17:06', 'Very detailed and informative', 4),
+	(35, 16, 2, '2020-12-19 00:17:06', 'I didn\'t undestand a word of this', 1),
+	(36, 17, 1, '2020-12-19 00:17:06', 'A classic book and, indeed, a definitive guide', 5);
 /*!40000 ALTER TABLE `book_reviews` ENABLE KEYS */;
 
 CREATE TABLE IF NOT EXISTS `groups` (
@@ -135,7 +210,7 @@ CREATE TABLE IF NOT EXISTS `groups` (
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='Contains user groups';
 
 /*!40000 ALTER TABLE `groups` DISABLE KEYS */;
 INSERT INTO `groups` (`id`, `name`) VALUES
@@ -150,13 +225,24 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` char(95) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
   KEY `groups_users_fk` (`group_id`),
   CONSTRAINT `groups_users_fk` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COMMENT='Contains user data';
 
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` (`id`, `group_id`, `username`, `password`, `created_at`) VALUES
-	(1, 2, 'Admin', '$argon2i$v=19$m=4096,t=3,p=1$USPqfScuWqzbrgapn3PvkA$k8NGymiRUbF2gGBIW9LJBIFC3kssG/BMA8s0HaQoiy0', '2020-12-17 08:45:21');
+	(1, 2, 'admin', '$argon2i$v=19$m=4096,t=3,p=1$USPqfScuWqzbrgapn3PvkA$k8NGymiRUbF2gGBIW9LJBIFC3kssG/BMA8s0HaQoiy0', '2020-12-17 08:45:21'),
+	(2, 1, 'user1', '$argon2i$v=19$m=4096,t=3,p=1$qP16BanIK+Lmk2WQo9wH8Q$cLuRPWBZjytYcqBdkiW60qjlgmAyfn2UMYCjl5bAJfE', '2020-12-19 00:09:06'),
+	(3, 1, 'user2', '$argon2i$v=19$m=4096,t=3,p=1$qP16BanIK+Lmk2WQo9wH8Q$cLuRPWBZjytYcqBdkiW60qjlgmAyfn2UMYCjl5bAJfE', '2020-12-19 00:09:06'),
+	(4, 1, 'user3', '$argon2i$v=19$m=4096,t=3,p=1$qP16BanIK+Lmk2WQo9wH8Q$cLuRPWBZjytYcqBdkiW60qjlgmAyfn2UMYCjl5bAJfE', '2020-12-19 00:09:06'),
+	(5, 1, 'user4', '$argon2i$v=19$m=4096,t=3,p=1$qP16BanIK+Lmk2WQo9wH8Q$cLuRPWBZjytYcqBdkiW60qjlgmAyfn2UMYCjl5bAJfE', '2020-12-19 00:09:06'),
+	(6, 1, 'user5', '$argon2i$v=19$m=4096,t=3,p=1$qP16BanIK+Lmk2WQo9wH8Q$cLuRPWBZjytYcqBdkiW60qjlgmAyfn2UMYCjl5bAJfE', '2020-12-19 00:09:06'),
+	(7, 1, 'user6', '$argon2i$v=19$m=4096,t=3,p=1$qP16BanIK+Lmk2WQo9wH8Q$cLuRPWBZjytYcqBdkiW60qjlgmAyfn2UMYCjl5bAJfE', '2020-12-19 00:09:06'),
+	(8, 1, 'user7', '$argon2i$v=19$m=4096,t=3,p=1$qP16BanIK+Lmk2WQo9wH8Q$cLuRPWBZjytYcqBdkiW60qjlgmAyfn2UMYCjl5bAJfE', '2020-12-19 00:09:06'),
+	(9, 1, 'user8', '$argon2i$v=19$m=4096,t=3,p=1$qP16BanIK+Lmk2WQo9wH8Q$cLuRPWBZjytYcqBdkiW60qjlgmAyfn2UMYCjl5bAJfE', '2020-12-19 00:09:06'),
+	(10, 1, 'user9', '$argon2i$v=19$m=4096,t=3,p=1$qP16BanIK+Lmk2WQo9wH8Q$cLuRPWBZjytYcqBdkiW60qjlgmAyfn2UMYCjl5bAJfE', '2020-12-19 00:09:06'),
+	(11, 1, 'user10', '$argon2i$v=19$m=4096,t=3,p=1$qP16BanIK+Lmk2WQo9wH8Q$cLuRPWBZjytYcqBdkiW60qjlgmAyfn2UMYCjl5bAJfE', '2020-12-19 00:09:06');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
