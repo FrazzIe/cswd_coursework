@@ -86,7 +86,7 @@ export default {
 		},
 		logout() {
 			this.$auth.logout().then(() => {				
-				
+				window.location.reload(true);
 			}).catch((error) => {
 				console.log(error.message);
 			});
