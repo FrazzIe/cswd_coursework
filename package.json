@@ -29,7 +29,7 @@
   "homepage": "https://github.com/FrazzIe/cswd_coursework#readme",
   "dependencies": {
     "@nuxtjs/auth": "^4.9.1",
-    "@nuxtjs/axios": "^5.12.3",
+    "@nuxtjs/axios": "^5.12.5",
     "argon2": "^0.27.1",
     "core-js": "^3.8.1",
     "dotenv": "^8.2.0",
