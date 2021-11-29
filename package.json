@@ -42,6 +42,6 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "@nuxtjs/vuetify": "^1.11.2"
+    "@nuxtjs/vuetify": "^1.12.2"
   }
 }
